@@ -15,7 +15,7 @@ exports.WelcomeParams = function (sender_id, screen_name, media_id) {
                 //             "id": media_id
                 //         }
                 //     }
-                // }
+                 }
             }
         }
     }
