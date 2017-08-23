@@ -37,6 +37,8 @@ stream.on('direct_message', function (directMsg) {
     console.log("Text is " + text);
     console.log(JSON.stringify(directms.sender));
     console.log(JSON.stringify(directMsg));
+
+    
 })
 
 app.get("/", function (req, res) {
