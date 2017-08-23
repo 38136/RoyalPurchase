@@ -1,4 +1,4 @@
-console.log("The follow bot is starting");
+// console.log("The follow bot is starting");
 
 const Twit = require("twit");
 const express = require("express");
@@ -7,12 +7,12 @@ let app = express();
 const config = require("./config");
 
 const apiai = require("apiai");
-const APIAII = apiai('8e19b5f4bcee4ca484320e31dfdfebf9');
+const APIAII = apiai('64976146fee347a39f0034e1b767d0e5');
 let T = new Twit(config);
 const fs = require("fs");
 
 
-let weatherfunc = require('./carfunction');
+let carFunc = require('./carfunction');
 let uploadMedia = require("./uploadpic");
 
 let stream = T.stream("user", {
@@ -25,7 +25,8 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-// console.log(T);
+console.log(T);
+console.log("The follow bot is starting");
 
 stream.on('direct_message', function (directMsg) {
     let directms = directMsg.direct_message;
@@ -34,12 +35,34 @@ stream.on('direct_message', function (directMsg) {
     let text = directms.text;
     let paramssend;
 
-    console.log("Text is " + text);
-    console.log(JSON.stringify(directms.sender));
-    console.log(JSON.stringify(directMsg));
+    // console.log("Text is " + text);
+    // console.log(JSON.stringify(directms.sender));
+    // console.log(JSON.stringify(directMsg));
 
-    
-})
+    if(text){
+        let request =  APIAII.textRequest(text, {
+            sessionId : "SessionID"
+        });
+
+        request.on('response', function(response){
+            let responseQuery= response.result.resolvedQuery;
+            let result = response;
+            if(result.result.action == "input.welcome"){
+                let image_media = JSON.parse(uploadMedia.TwitterUpload());
+                paramssend = carFunc.WelcomeParams(sender_id,screen_name);
+                T.post("direct_messages/events/new",paramssend, function(err, data,response){
+
+                });
+
+            }
+
+        });
+        request.on("error", function(error){
+            console.log("error");
+        });
+        request.end();
+    }
+});
 
 app.get("/", function (req, res) {
     res.send("success");

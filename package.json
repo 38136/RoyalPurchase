@@ -1,7 +1,7 @@
 {
   "name": "royal_Purchase",
   "version": "1.0.0",
-  "description": "weather bot",
+  "description": "Royal vehicle purchasing",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
