@@ -1,4 +1,4 @@
-exports.WelcomeParams = function (sender_id, screen_name, media_id) {
+exports.WelcomeParams = function (sender_id, screen_name) {
     return {
         "event": {
             "type": "message_create",
@@ -16,7 +16,7 @@ exports.WelcomeParams = function (sender_id, screen_name, media_id) {
                 //         }
                 //     }
                  }
-                 
+
             }
         }
     }
