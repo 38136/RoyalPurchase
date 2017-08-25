@@ -4,10 +4,10 @@ var bodyParser=require('body-parser');
 var app = express();
 var config = require('./config');
 var apiai = require('apiai');
-var APIAII = apiai('64976146fee347a39f0034e1b767d0e5');
+var APIAII = apiai('8e19b5f4bcee4ca484320e31dfdfebf9');
 var Twitter = new twit(config);
 var fs = require("fs");
-var botfunction = require('./carFunction');
+var botfunction = require('./weatherfunction');
 var uploadMedia = require("./uploadpic");
 var stream = Twitter.stream("user", { stringify_friend_ids: true });
 app.use(bodyParser.json());
@@ -18,10 +18,10 @@ stream.on('direct_message', function (directMsg) {
     var screen_name = directms.sender.name;
     var text = directms.text;
     var paramssend;
-    //console.log("Text is "+text);
+    console.log("Text is "+text);
     //console.log(JSON.stringify(directms.sender));
-  //  console.log(JSON.stringify(directMsg));
-    //fs.writeFileSync("./data.json", JSON.stringify(directMsg), "utf8");
+    //console.log(JSON.stringify(directMsg));
+    fs.writeFileSync("./data.json", JSON.stringify(directMsg), "utf8");
     if (text) {
         var request = APIAII.textRequest(text, {
             sessionId: 'APIAISESSID'
@@ -29,20 +29,29 @@ stream.on('direct_message', function (directMsg) {
         request.on('response', function (response) {
             let responseQuery = response.result.resolvedQuery;
             let result = response;
-            if (result.result.action=="input.welcome") {
-              var image_media = JSON.parse(uploadMedia.TwitterUpload());
-               paramssend = botfunction.WelcomeParams(sender_id, screen_name, image_media.media_id_string);
+            // console.log(response.result);
+            //console.log(text + "= >" + responseQuery);
+            if (text == "hi") {
+                var image_media = JSON.parse(uploadMedia.TwitterUpload());
+                paramssend = botfunction.WelcomeParams(sender_id, screen_name, image_media.media_id_string);
                 Twitter.post("direct_messages/events/new", paramssend, function (err, data, response) {
-                });
+                    stream.stop();
+                    stream.start();
+                })
             }
+            
         });
+           
+      
+            
+          
         request.on('error', function (error) {
-        //  console.log(error);
+            //        console.log(error);
         });
         request.end();
     }
-});
 
+});
 
 app.get("/",function(req,res){
     res.send("Localhost Server is  running!!!");
