@@ -28,7 +28,7 @@ stream.on('direct_message', function (directMsg) {
     fs.writeFileSync("./data.json", JSON.stringify(directMsg), "utf8");
     if (text) {
         var request = APIAII.textRequest(text, {
-            sessionId: 'APIAISESSID'
+            sessionId: 'sessionID'
         });
         request.on('response', function (response) {
             let responseQuery = response.result.resolvedQuery;
@@ -36,8 +36,9 @@ stream.on('direct_message', function (directMsg) {
             // console.log(response.result);
             //console.log(text + "= >" + responseQuery);
             if (text == "hi") {
-                var image_media = JSON.parse(uploadMedia.TwitterUpload());
-                params = carFunc.WelcomeParams(sender_id, screen_name, image_media.media_id_string);
+                // var image_media = JSON.parse(uploadMedia.TwitterUpload());
+                params = carFunc.WelcomeParams(sender_id, screen_name);
+                // params = carFunc.WelcomeParams(sender_id, screen_name, image_media.media_id_string);
                 Twitter.post("direct_messages/events/new", params, function (err, data, response) {
                     stream.stop();
                     stream.start();
